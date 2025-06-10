@@ -1,0 +1,177 @@
+<!-- 5. Debounce
+Crie function debounce(fn, delay) que receba uma função fn e um delay
+em ms, retornando uma nova função que só executa fn se não for
+chamada novamente dentro do intervalo. -->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de Debounce com Busca</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 12px 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .suggestions-box {
+            border: 1px solid #eee;
+            border-radius: 5px;
+            min-height: 50px;
+            /* Para mostrar o "Carregando..." */
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .suggestion-item {
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            color: #555;
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .loading-text {
+            color: #888;
+            font-style: italic;
+        }
+
+        .no-results {
+            color: #cc0000;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Busca Debounced</h1>
+        <input type="text" id="busca" placeholder="Digite para pesquisar (Ex: 'Kotlin', 'React', 'IA')...">
+        <div class="suggestions-box" id="sugestoes">
+            <p class="loading-text">Nenhuma busca iniciada ainda.</p>
+        </div>
+    </div>
+
+    <script>
+        // --- Sua função debounce ---
+        function debounce(fn, delay) {
+            let timer = null;
+
+            return function (...args) {
+                clearTimeout(timer);
+
+                timer = setTimeout(() => {
+                    fn.apply(this, args);
+                }, delay);
+            };
+        }
+
+        const dadosSimulados = [
+            "Kotlin Intermediário",
+            "JavaScript Intermediário",
+            "React Intermediário",
+            "Node.js Intermediário",
+            "SQL Intermediário",
+            "Python Intermediário",
+            "Java Intermediário",
+            "Machine Learning Intermediário",
+            "Artificial Intelligence Fundamentals",
+            "Web Development Basics",
+            "Mobile App Development",
+            "Docker Containers",
+            "Git e GitHub Avançado"
+        ];
+
+        function realizarPesquisaReal(texto) {
+            const sugestoesDiv = document.getElementById('sugestoes');
+            sugestoesDiv.innerHTML = '<p class="loading-text">Carregando sugestões...</p>';
+
+            setTimeout(() => {
+                if (!texto || texto.trim() === '') {
+                    sugestoesDiv.innerHTML = '<p class="loading-text">Nenhuma busca iniciada ainda.</p>';
+                    return;
+                }
+
+                const termoBuscaLowerCase = texto.toLowerCase();
+                const resultados = dadosSimulados.filter(item =>
+                    item.toLowerCase().includes(termoBuscaLowerCase)
+                );
+
+                if (resultados.length > 0) {
+                    sugestoesDiv.innerHTML = '';
+                    resultados.forEach(item => {
+                        const p = document.createElement('p');
+                        p.className = 'suggestion-item';
+                        p.textContent = item;
+                        sugestoesDiv.appendChild(p);
+                    });
+                } else {
+                    sugestoesDiv.innerHTML = '<p class="no-results">Nenhum resultado encontrado para "' + texto + '".</p>';
+                }
+            }, 500);
+        }
+
+        let pesquisaDebounced = debounce(realizarPesquisaReal, 500);
+        document.getElementById('busca').addEventListener('input', event => {
+            pesquisaDebounced(event.target.value);
+        });
+    </script>
+</body>
+
+<!-- </html>
+
+<input id="busca" placeholder="Digite Algo..."></input>
+<script>
+    function debouce(fn, delay) {
+        let timer = null
+
+        return function(...args) {
+            clearTimeout(timer)
+
+            timer = setTimeout(() => {
+                fn.apply(this, args)
+            }, delay)
+        }
+    }
+
+    function pesquisar(texto) {
+        console.log("Buscando por: ", texto)
+    }
+
+    let pesquisaDebouced = debouce(pesquisar, 3000)
+
+    document.getElementById('busca').addEventListener('input', event => {
+        pesquisaDebouced(event.target.value)
+    })  
+</script> -->
