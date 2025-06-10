@@ -86,6 +86,7 @@ Lista-de-Exercios-2-MaisPraTI/
 ├── EX08.js
 ├── EX09.js
 ├── package.json
+├── .gitignore
 ├── README.md
 └── README.pt-br.md
 ```
